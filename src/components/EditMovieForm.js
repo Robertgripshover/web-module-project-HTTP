@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -5,7 +6,10 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const EditMovieForm = (props) => {
+
 	const { push } = useHistory();
+
+	const {id} = useParams()
 
 	const { setMovies } = props;
 	const [movie, setMovie] = useState({
@@ -23,12 +27,22 @@ const EditMovieForm = (props) => {
         });
     }
 
+	useEffect(() => {
+		axios.get(`http://localhost:9000/api/movies/${id}`)
+			.then(res => {
+				setMovie(res.data)
+			})
+			.catch(err => {
+				console.log(err.response)
+			})
+	}, [])
+
     const handleSubmit = (e) => {
         e.preventDefault();
         axios.put(`http://localhost:9000/api/movies/${id}`, movie)
             .then(res=>{
-                setMovies(res.data);
-                push(`/movies/${movie.id}`);
+                props.setMovies(res.data);
+                push(`/movies/${id}`);
 			})
 			.catch(err=>{
 				console.log(err);
