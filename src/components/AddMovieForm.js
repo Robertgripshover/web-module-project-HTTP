@@ -27,12 +27,22 @@ const AddMovieForm = (props) => {
             [e.target.name]: e.target.value
         });
     }
+	
+	useEffect(() => {
+		axios.get(`http://localhost:9000/api/movies/`)
+			.then(res => {
+				setNewMovie(res.data)
+			})
+			.catch(err => {
+				console.log(err.response)
+			})
+	}, [])
 
 	const handleSubmit = (e) => {
         e.preventDefault();
         axios.post(`http://localhost:9000/api/movies`, newMovie)
             .then(res=>{
-				props.setNewMovie(res.data)
+				setNewMovie(res.data)
                 push(`/movies`);
 			})
 			.catch(err=>{
@@ -40,8 +50,7 @@ const AddMovieForm = (props) => {
 			})
 	}
 
-
-
+	
 	const { title, director, genre, metascore, description } = newMovie;
 
     return (
