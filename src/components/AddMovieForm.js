@@ -30,10 +30,10 @@ const AddMovieForm = (props) => {
 
 	const handleSubmit = (e) => {
         e.preventDefault();
-        axios.get(`http://localhost:9000/api/movies`, newMovie)
+        axios.post(`http://localhost:9000/api/movies`, newMovie)
             .then(res=>{
-                props.setMovies(res.data);
-                push(`/movies/${id}`);
+				props.setNewMovie(res.data)
+                push(`/movies`);
 			})
 			.catch(err=>{
 				console.log(err);
